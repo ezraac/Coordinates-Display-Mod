@@ -1,0 +1,11 @@
+{
+	"required": true,
+	"package": "com.ezra.coordinatedisplay.mixin",
+	"compatibilityLevel": "JAVA_21",
+	"mixins": [
+		"ExampleMixin"
+	],
+	"injectors": {
+		"defaultRequire": 1
+	}
+}

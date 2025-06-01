@@ -1,0 +1,40 @@
+{
+	"schemaVersion": 1,
+	"id": "coordinates-display",
+	"version": "${version}",
+	"name": "Coordinates Display",
+	"description": "A mod to display coordinates on the screen instead of using the debug screen. Made for Jazzmin :D",
+	"authors": [
+		"Me!"
+	],
+	"contact": {
+		"homepage": "https://fabricmc.net/",
+		"sources": "https://github.com/FabricMC/fabric-example-mod"
+	},
+	"license": "MIT",
+	"icon": "assets/coordinates-display/icon.png",
+	"environment": "*",
+	"entrypoints": {
+		"main": [
+			"com.ezra.coordinatedisplay.CoordinatesDisplay"
+		],
+		"fabric-datagen": [
+			"com.ezra.coordinatedisplay.CoordinatesDisplayDataGenerator"
+		],
+		"client": [
+			"com.ezra.coordinatedisplay.CoordinatesDisplayClient"
+		]
+	},
+	"mixins": [
+		"coordinates-display.mixins.json"
+	],
+	"depends": {
+		"fabricloader": ">=0.16.14",
+		"minecraft": "~1.21.4",
+		"java": ">=21",
+		"fabric-api": "*"
+	},
+	"suggests": {
+		"another-mod": "*"
+	}
+}
