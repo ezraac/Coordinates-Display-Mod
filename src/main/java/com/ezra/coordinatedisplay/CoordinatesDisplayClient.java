@@ -1,11 +1,17 @@
 package com.ezra.coordinatedisplay;
 
+import org.lwjgl.glfw.GLFW;
+
 import net.fabricmc.api.ClientModInitializer;
+import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
+import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.fabricmc.fabric.api.client.rendering.v1.*;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.*;
+import net.minecraft.client.option.KeyBinding;
 import net.minecraft.client.render.*;
+import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 
 
@@ -20,8 +26,24 @@ public class CoordinatesDisplayClient implements ClientModInitializer{
 	private static final Identifier COORDINATE_LAYER = Identifier.of("coordinate-display", "hud-coordinate-layer");
 	
 	public static int color = 0x40FF91F2;
+	public static boolean displayOn = true;
+	public static KeyBinding openKey;
 	@Override
 	public void onInitializeClient() {
+		
+		//Register L key to open settings
+		openKey = KeyBindingHelper.registerKeyBinding(new KeyBinding(
+				"key.coordinates_display.settings",
+	            GLFW.GLFW_KEY_L,
+	            "category.coordinates_display" 
+				));
+		
+		ClientTickEvents.END_CLIENT_TICK.register(client -> {
+			while(openKey.wasPressed()) {
+				client.setScreen(new CoordinatesDisplayMenu(Text.of("Coordinates Display Settings")));
+			}
+		});
+		
 		HudLayerRegistrationCallback.EVENT.register(layerDrawer -> layerDrawer.attachLayerBefore(IdentifiedLayer.CHAT, COORDINATE_LAYER, CoordinatesDisplayClient::render));
 	}
 	
@@ -37,6 +59,7 @@ public class CoordinatesDisplayClient implements ClientModInitializer{
 		MinecraftClient client = MinecraftClient.getInstance();
 		// null check
 		if (client.player == null || client.world == null) return;
+		if (!displayOn) return;
 		
 		// Settings for the UI
 		
