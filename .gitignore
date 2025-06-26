@@ -43,3 +43,7 @@ eula.txt
 *.key
 *.token
 secrets.properties
+<<<<<<< HEAD
+=======
+
+>>>>>>> a382c28 (Clean up ignored files from repo)
