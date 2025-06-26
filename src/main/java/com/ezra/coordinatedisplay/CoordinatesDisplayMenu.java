@@ -19,12 +19,14 @@ public class CoordinatesDisplayMenu extends Screen {
 	
 	@Override
 	protected void init() {
-		// Display on button
+		// Setting values for size and position
+		
+		// Display on/off button
 		toggleButton = ButtonWidget.builder(
-				Text.of("Display: " + (CoordinatesDisplayClient.displayOn ? "on" : "off")), 
+				Text.of("Display: " + (CoordinatesDisplayClient.displayOn ? "On" : "oOff")), 
 				builder -> {
 					CoordinatesDisplayClient.displayOn = !CoordinatesDisplayClient.displayOn;
-					toggleButton.setMessage(Text.of("Display: " + (CoordinatesDisplayClient.displayOn ? "on" : "off")));
+					toggleButton.setMessage(Text.of("Display: " + (CoordinatesDisplayClient.displayOn ? "On" : "Off")));
 				})
 				.position(10, 10)
 				.size(100, 20)

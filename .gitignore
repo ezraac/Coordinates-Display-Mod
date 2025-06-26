@@ -1,2 +1,46 @@
-/.gradle/
+# ========== Java / Gradle ==========
+*.class
+*.jar
+*.log
+*.tmp
+
+# Build folders
 /build/
+out/
+bin/
+
+# Gradle files
+.gradle/
+!gradle/wrapper/gradle-wrapper.jar
+gradle-app.setting
+
+# IDE settings
+.idea/
+*.iml
+*.ipr
+*.iws
+*.launch
+.vscode/
+.classpath
+.project
+.settings/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Run configurations (if not shared intentionally)
+run/
+
+# Minecraft-specific
+run/
+logs/
+crash-reports/
+eula.txt
+
+# Optional: secrets or local properties
+*.env
+*.key
+*.token
+secrets.properties
+
