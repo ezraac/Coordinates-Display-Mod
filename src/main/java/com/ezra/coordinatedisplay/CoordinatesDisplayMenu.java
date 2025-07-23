@@ -1,29 +1,35 @@
 package com.ezra.coordinatedisplay;
 
+import org.lwjgl.glfw.GLFW;
+
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.text.Text;
 
 public class CoordinatesDisplayMenu extends Screen {
 	
-	private double redValue = (CoordinatesDisplayClient.color >> 16) & 0xFF;
-	private double greenValue = (CoordinatesDisplayClient.color >> 8) & 0xFF;
-	private double blueValue = CoordinatesDisplayClient.color & 0xFF;
-	private double alphaValue = (CoordinatesDisplayClient.color >> 24) & 0xFF;
+	private static int redValue;
+	private static int greenValue;
+	private static int blueValue;
+	private static int alphaValue;
 	
 	private ButtonWidget toggleButton;
-	
+	private ModSettings.Settings settings;
+
 	public CoordinatesDisplayMenu(Text title) {
 		super(title);
 	}
 	
 	@Override
 	protected void init() {
-		// Setting values for size and position
-		
+		// Getting settings from JSON
+		settings = ModSettings.get();
+		parseGuiSettings();
+
 		// Display on/off button
 		toggleButton = ButtonWidget.builder(
-				Text.of("Display: " + (CoordinatesDisplayClient.displayOn ? "On" : "oOff")), 
+				Text.of("Display: " + (CoordinatesDisplayClient.displayOn ? "On" : "Off")),
 				builder -> {
 					CoordinatesDisplayClient.displayOn = !CoordinatesDisplayClient.displayOn;
 					toggleButton.setMessage(Text.of("Display: " + (CoordinatesDisplayClient.displayOn ? "On" : "Off")));
@@ -40,6 +46,7 @@ public class CoordinatesDisplayMenu extends Screen {
 			int b = CoordinatesDisplayClient.color & 0xFF;
 			CoordinatesDisplayClient.color = (a << 24) | (r << 16) | (g << 8) | b;
 			this.redValue = r;
+			settings.color.red = r;
 		}));
 		
 		// Green Slider
@@ -49,6 +56,7 @@ public class CoordinatesDisplayMenu extends Screen {
 			int b = CoordinatesDisplayClient.color & 0xFF;
 			CoordinatesDisplayClient.color = (a << 24) | (r << 16) | (g << 8) | b;
 			this.greenValue = g;
+			settings.color.green = g;
 		}));
 		
 		// Blue Slider
@@ -58,17 +66,37 @@ public class CoordinatesDisplayMenu extends Screen {
 			int g = (CoordinatesDisplayClient.color >> 8) & 0xFF;
 			CoordinatesDisplayClient.color = (a << 24) | (r << 16) | (g << 8) | b;
 			this.blueValue = b;
+			settings.color.blue = b;
 		}));
 		
-		// Transparency Slider
-		addDrawableChild(new ColorSlider(10, 140, 100, 20, "Transparancy", alphaValue/255d, a -> {
+		// Opacity Slider
+		addDrawableChild(new ColorSlider(10, 140, 100, 20, "Opacity", alphaValue/255d, a -> {
 			int r = (CoordinatesDisplayClient.color >> 16) & 0xFF;
 			int g = (CoordinatesDisplayClient.color >> 8) & 0xFF;
 			int b = CoordinatesDisplayClient.color & 0xFF;
 			
-			int invertedAlpha = 255-a;
-			CoordinatesDisplayClient.color = (invertedAlpha << 24) | (r << 16) | (g << 8) | b;
+			CoordinatesDisplayClient.color = (alphaValue << 24) | (r << 16) | (g << 8) | b;
 			this.alphaValue = a;
+			settings.color.alpha = a;
 		}));
 	}
+
+	private void parseGuiSettings() {
+		redValue = settings.color.red;
+		greenValue = settings.color.green;
+		blueValue = settings.color.blue;
+		alphaValue = settings.color.alpha;
+	}
+
+	@Override
+	public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
+		// Check if the key pressed matches your toggle key
+		if (keyCode == GLFW.GLFW_KEY_L) {
+			MinecraftClient.getInstance().setScreen(null); // Close the menu
+			return true;
+		}
+
+		return super.keyPressed(keyCode, scanCode, modifiers);
+	}
+
 }
