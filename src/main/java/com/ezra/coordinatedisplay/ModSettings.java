@@ -52,23 +52,33 @@ public class ModSettings {
     }
   }
 
-  public static boolean save() {
+  /**
+   * Saves configuration settings into a JSON file
+   *
+   * @return
+   */
+  public static void save() {
     assert INSTANCE != null;
     INSTANCE.color.hex = (INSTANCE.color.alpha << 24) | (INSTANCE.color.red << 16) | (INSTANCE.color.green << 8) | INSTANCE.color.blue;
     try(Writer writer = Files.newBufferedWriter(CONFIG_PATH, StandardOpenOption.CREATE)) {
       gson.toJson(INSTANCE, writer);
-      return true;
     } catch (IOException e) {
       System.err.println("Failed to save settings.");
-      return false;
     }
   }
 
+  /**
+   * The settings class for holding all the
+   * configuration settings for the client.
+   */
   public static class Settings {
     public Color color = new Color();
     public Size size = new Size();
   }
 
+  /**
+   * Static configuration class for color.
+   */
   public static class Color {
     public int red = 255;
     public int green = 145;
@@ -77,8 +87,10 @@ public class ModSettings {
     public int hex = 0xFFFF91F2;
   }
 
+  /**
+   * Static configuration class for holding size.
+   */
   public static class Size {
-    public int padding = 5;
-    public int scale = 1;
+    public int padding = 20;
   }
 }

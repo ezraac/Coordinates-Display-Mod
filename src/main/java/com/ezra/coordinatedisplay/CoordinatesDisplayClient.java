@@ -27,7 +27,6 @@ public class CoordinatesDisplayClient implements ClientModInitializer{
   private static final Identifier COORDINATE_LAYER = Identifier.of("coordinate-display", "hud-coordinate-layer");
   private static final MinecraftClient mc = MinecraftClient.getInstance();
 
-  public static boolean loaded = false;
   public static int color = 0x40FF91F2;
   public static boolean displayOn = true;
   public static KeyBinding openKey;
@@ -41,6 +40,7 @@ public class CoordinatesDisplayClient implements ClientModInitializer{
         "category.coordinates_display"
     ));
 
+    // Runs upon key pressing.
     ClientTickEvents.END_CLIENT_TICK.register(client -> {
       while(openKey.wasPressed()) {
         if (mc.currentScreen instanceof CoordinatesDisplayMenu) {
@@ -51,6 +51,7 @@ public class CoordinatesDisplayClient implements ClientModInitializer{
       }
     });
 
+    // Runs upon Minecraft client exit.
     ClientLifecycleEvents.CLIENT_STOPPING.register(client -> {
       //Save Settings
       ModSettings.save();
@@ -83,8 +84,7 @@ public class CoordinatesDisplayClient implements ClientModInitializer{
     String toDisplay = String.format("%.1f, %.1f, %.1f", x, y, z);
 
     // Padding
-    int xPadding = 5;
-    int yPadding = 5;
+    int padding = (int) (textRenderer.getWidth(toDisplay) * 0.05);
 
     // Top left corner of UI
     int xUI = 0;
@@ -93,11 +93,11 @@ public class CoordinatesDisplayClient implements ClientModInitializer{
     // Fill a square to display coordinates in
     context.fill(xUI,
         yUI,
-        xUI + textRenderer.getWidth(toDisplay) + (xPadding*2),
-        yUI + textRenderer.fontHeight + (yPadding*2),
+        xUI + textRenderer.getWidth(toDisplay) + (padding*2),
+        yUI + textRenderer.fontHeight + (padding*2),
         color);
 
     // Draw the coordinates inside the square
-    context.drawText(textRenderer, toDisplay, xUI + xPadding, yUI + yPadding, 0xFFFFFF, false);
+    context.drawText(textRenderer, toDisplay, xUI + padding, yUI + padding, 0xFFFFFF, false);
   }
 }

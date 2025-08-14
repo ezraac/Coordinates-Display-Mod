@@ -27,6 +27,18 @@ public class CoordinatesDisplayMenu extends Screen {
 		settings = ModSettings.get();
 		parseGuiSettings();
 
+		double width = MinecraftClient.getInstance().getWindow().getScaledWidth();
+		double height = MinecraftClient.getInstance().getWindow().getScaledHeight();
+		int startX = (int) (width * 0.05);
+		int startY = (int) (height * 0.05);
+
+		int sliderWidth = (int) (width * 0.25);
+		int sliderHeight = (int) (height * 0.075);
+
+		int padding = settings.size.padding;
+
+		int nextColorY = startY;
+
 		// Display on/off button
 		toggleButton = ButtonWidget.builder(
 				Text.of("Display: " + (CoordinatesDisplayClient.displayOn ? "On" : "Off")),
@@ -34,13 +46,14 @@ public class CoordinatesDisplayMenu extends Screen {
 					CoordinatesDisplayClient.displayOn = !CoordinatesDisplayClient.displayOn;
 					toggleButton.setMessage(Text.of("Display: " + (CoordinatesDisplayClient.displayOn ? "On" : "Off")));
 				})
-				.position(10, 10)
-				.size(100, 20)
+				.position(startX, startY)
+				.size(sliderWidth, sliderHeight)
 				.build();
 		
 		addDrawableChild(toggleButton);
+
 		// Red Slider
-		addDrawableChild(new ColorSlider(10, 50, 100, 20, "Red", redValue/255d, r -> {
+		addDrawableChild(new ColorSlider(startX, nextColorY += sliderHeight + padding, sliderWidth, sliderHeight, "Red", redValue/255d, r -> {
 			int a = (CoordinatesDisplayClient.color >> 24) & 0xFF;
 			int g = (CoordinatesDisplayClient.color >> 8) & 0xFF;
 			int b = CoordinatesDisplayClient.color & 0xFF;
@@ -50,7 +63,7 @@ public class CoordinatesDisplayMenu extends Screen {
 		}));
 		
 		// Green Slider
-		addDrawableChild(new ColorSlider(10, 80, 100, 20, "Green", greenValue/255d, g -> {
+		addDrawableChild(new ColorSlider(startX, nextColorY += sliderHeight + padding, sliderWidth, sliderHeight, "Green", greenValue/255d, g -> {
 			int a = (CoordinatesDisplayClient.color >> 24) & 0xFF;
 			int r = (CoordinatesDisplayClient.color >> 16) & 0xFF;
 			int b = CoordinatesDisplayClient.color & 0xFF;
@@ -60,7 +73,7 @@ public class CoordinatesDisplayMenu extends Screen {
 		}));
 		
 		// Blue Slider
-		addDrawableChild(new ColorSlider(10, 110, 100, 20, "Blue", blueValue/255d, b -> {
+		addDrawableChild(new ColorSlider(startX, nextColorY += sliderHeight + padding, sliderWidth, sliderHeight, "Blue", blueValue/255d, b -> {
 			int a = (CoordinatesDisplayClient.color >> 24) & 0xFF;
 			int r = (CoordinatesDisplayClient.color >> 16) & 0xFF;
 			int g = (CoordinatesDisplayClient.color >> 8) & 0xFF;
@@ -70,7 +83,7 @@ public class CoordinatesDisplayMenu extends Screen {
 		}));
 		
 		// Opacity Slider
-		addDrawableChild(new ColorSlider(10, 140, 100, 20, "Opacity", alphaValue/255d, a -> {
+		addDrawableChild(new ColorSlider(startX, nextColorY + (sliderHeight + padding), sliderWidth, sliderHeight, "Opacity", alphaValue/255d, a -> {
 			int r = (CoordinatesDisplayClient.color >> 16) & 0xFF;
 			int g = (CoordinatesDisplayClient.color >> 8) & 0xFF;
 			int b = CoordinatesDisplayClient.color & 0xFF;
@@ -81,6 +94,9 @@ public class CoordinatesDisplayMenu extends Screen {
 		}));
 	}
 
+	/**
+	 * Parses the color settings from settings.
+	 */
 	private void parseGuiSettings() {
 		redValue = settings.color.red;
 		greenValue = settings.color.green;
