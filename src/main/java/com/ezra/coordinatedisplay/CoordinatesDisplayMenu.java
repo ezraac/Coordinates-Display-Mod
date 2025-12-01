@@ -1,5 +1,6 @@
 package com.ezra.coordinatedisplay;
 
+import net.minecraft.client.input.KeyInput;
 import org.lwjgl.glfw.GLFW;
 
 import net.minecraft.client.MinecraftClient;
@@ -105,14 +106,14 @@ public class CoordinatesDisplayMenu extends Screen {
 	}
 
 	@Override
-	public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
+	public boolean keyPressed(KeyInput keyInput) {
 		// Check if the key pressed matches your toggle key
-		if (keyCode == GLFW.GLFW_KEY_L) {
+		if (keyInput.key() == GLFW.GLFW_KEY_L) {
 			MinecraftClient.getInstance().setScreen(null); // Close the menu
 			return true;
 		}
 
-		return super.keyPressed(keyCode, scanCode, modifiers);
+		return super.keyPressed(keyInput);
 	}
 
 }

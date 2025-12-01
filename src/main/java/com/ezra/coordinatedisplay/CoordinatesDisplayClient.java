@@ -36,8 +36,8 @@ public class CoordinatesDisplayClient implements ClientModInitializer{
     //Register L key to open settings
     openKey = KeyBindingHelper.registerKeyBinding(new KeyBinding(
         "key.coordinates_display.settings",
-        GLFW.GLFW_KEY_L,
-        "category.coordinates_display"
+        GLFW.GLFW_KEY_I,
+        KeyBinding.Category.MISC
     ));
 
     // Runs upon key pressing.
@@ -57,7 +57,9 @@ public class CoordinatesDisplayClient implements ClientModInitializer{
       ModSettings.save();
     });
 
-    HudLayerRegistrationCallback.EVENT.register(layerDrawer -> layerDrawer.attachLayerBefore(IdentifiedLayer.CHAT, COORDINATE_LAYER, CoordinatesDisplayClient::render));
+    HudRenderCallback.EVENT.register((DrawContext matrices, RenderTickCounter tickDelta) -> {
+      render(matrices, tickDelta);
+    });
     color = ModSettings.get().color.hex;
   }
 
@@ -90,7 +92,6 @@ public class CoordinatesDisplayClient implements ClientModInitializer{
     int xUI = 0;
     int yUI = 0;
 
-    // Fill a square to display coordinates in
     context.fill(xUI,
         yUI,
         xUI + textRenderer.getWidth(toDisplay) + (padding*2),
