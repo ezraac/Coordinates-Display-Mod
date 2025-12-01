@@ -108,7 +108,7 @@ public class CoordinatesDisplayMenu extends Screen {
 	@Override
 	public boolean keyPressed(KeyInput keyInput) {
 		// Check if the key pressed matches your toggle key
-		if (keyInput.key() == GLFW.GLFW_KEY_L) {
+		if (keyInput.key() == GLFW.GLFW_KEY_I) {
 			MinecraftClient.getInstance().setScreen(null); // Close the menu
 			return true;
 		}
