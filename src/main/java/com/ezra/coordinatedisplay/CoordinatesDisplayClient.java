@@ -99,6 +99,6 @@ public class CoordinatesDisplayClient implements ClientModInitializer{
         color);
 
     // Draw the coordinates inside the square
-    context.drawText(textRenderer, toDisplay, xUI + padding, yUI + padding, 0xFFFFFF, false);
+    context.drawText(textRenderer, toDisplay, xUI + padding, yUI + padding, 0xFFFFFFFF, false);
   }
 }
